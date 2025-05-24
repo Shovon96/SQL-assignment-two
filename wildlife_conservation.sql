@@ -66,3 +66,8 @@ VALUES (4, 'Derek Fox', 'Coastal Plains');
 
 INSERT INTO rangers (rangers_name, region)
 VALUES ('Derek Fox', 'Coastal Plains');
+
+
+-- Problem 2: Count unique species ever sighted
+SELECT COUNT(DISTINCT species_id) AS count_unique_species
+FROM sightings;
