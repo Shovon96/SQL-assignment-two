@@ -85,3 +85,14 @@ FROM rangers r
 LEFT JOIN sightings s ON r.rangers_id = s.ranger_id
 GROUP BY r.rangers_name
 ORDER BY r.rangers_name;
+
+
+-- Problem 5: List species that have never been sighted.
+SELECT common_name
+FROM species sp
+WHERE NOT EXISTS (
+    SELECT *
+    FROM sightings si
+    WHERE si.species_id = sp.species_id
+);
+
