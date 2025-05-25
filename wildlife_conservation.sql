@@ -96,3 +96,11 @@ WHERE NOT EXISTS (
     WHERE si.species_id = sp.species_id
 );
 
+ 
+-- Problem 6: Show the most recent 2 sightings.
+SELECT sp.common_name, si.sighting_time, r.rangers_name
+FROM sightings si
+JOIN species sp ON si.species_id = sp.species_id
+JOIN rangers r ON si.ranger_id = r.rangers_id
+ORDER BY si.sighting_time DESC
+LIMIT 2;
