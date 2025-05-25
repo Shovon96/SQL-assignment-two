@@ -126,14 +126,24 @@ CREATE TABLE example2 (
 ```
 Inserting `'Alice'` → stored as `'Alice'` only (no extra space).
 
+## 5. What are the LIMIT and OFFSET clauses used for?
 
+### Answer: 
 
-      5.  Explain the purpose of the WHERE clause in a SELECT statement.
+PostgreSQL-এ `LIMIT` এবং `OFFSET` clause ব্যবহার করা হয় কোনো SELECT কোয়েরি থেকে কতগুলো `row` return আসবে এবং কোন row গুলো স্কিপ করা হবে তা নির্ধারণ করতে। এটি সাধারণত যখন ডাটাবেজে অনেক বড় টেবিল থাকে এবং সবগুলো ডাটা একসাথে দেখানো সম্ভব হয় না, তখন ধাপে ধাপে `pagination` আকারে দেখাতে হয়। মূলত `LIMIT` এবং `OFFSET` ব্যবহার করে কোনো টেবিলের ডাটা pagination করা হয়।
 
-      7.  How can you modify data using UPDATE statements?
+<b>LIMIT এর ব্যবহার:</b>
+LIMIT ক্লজটি আপনাকে একটি কোয়েরি থেকে সর্বাধিক কতগুলি সারি return করবেন তা নির্দিষ্ট করে দেয়। সারিগুলিকে সীমাবদ্ধ করার আগে সাজানোর জন্য এটি ORDER BY ক্লজ সহ বা ছাড়াই ব্যবহার করা যেতে পারে।
 
-      8.  What is the significance of the JOIN operation, and how does it work in PostgreSQL?
+<b>OFFSET এর ব্যবহার:</b>
+OFFSET ক্লজটি আপনাকে ফলাফল সেটটি ফেরত দেওয়ার আগে নির্দিষ্ট সংখ্যক সারি স্কিপ করে যায়। এটি LIMIT ক্লজের সাথে পেজিনেশন বা ব্যাচ প্রক্রিয়াকরণ তৈরি করতে ব্যবহার করা হয়।
 
-      9.  Explain the GROUP BY clause and its role in aggregation operations.
-      
-     10.   How can you calculate aggregate functions like COUNT(), SUM(), and AVG() in PostgreSQL?
+<b>উদাহরন:</b>
+মনে করি আমার কাছে, students নামে একটি টেবিল আছে যেখানে ১০০ জন ছাত্রের তথ্য রয়েছে। এখন আমি যদি প্রতি পেজে ১০ জন করে দেখাতে চাই, তাহলে:
+
+```sql
+    SELECT * FROM students LIMIT 10 OFFSET 0; -- প্রথম পেজ
+    SELECT * FROM students LIMIT 10 OFFSET 10; -- দ্বিতীয় পেজ
+    SELECT * FROM students LIMIT 10 OFFSET 20; -- তৃতীয় পেজ
+```
+এইভাবে প্রতি পেজে নতুন নতুন ডেটা দেখানো যায় `LIMIT` এবং `OFFSET` ব্যবহার করে। `LIMIT` এর মাধ্যমে কতগুলো ডাটা দেখানো হবে সেটা নির্দিষ্ট করা হয় এবং `OFFSET` এর মাধ্যমে কত থেকে কত নাম্বার পর্যন্ত ডাটা দেখানো হবে সেটা নির্দিষ্ট করা হয়। এভাবেই মূলত `pagination` করা হয়।
