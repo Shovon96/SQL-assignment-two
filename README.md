@@ -34,6 +34,7 @@ PostgreSQL-এ স্কিমা (schema) হচ্ছে ডেটাবেস
 - রক্ষণাবেক্ষণকে সহজ করে তোলে এবং আলাদা স্কিমাগুলির সাহায্যে, অন্যগুলিকে প্রভাবিত না করে ডাটাবেসের অংশগুলি ড্রপ বা ব্যাকআপ করে।
 
 <b>উদাহরণঃ</b>
+
 ```sql
 CREATE SCHEMA analytics;
 
@@ -45,7 +46,57 @@ CREATE TABLE analytics.visits (
 ```
 এখানে, `visits` টেবিলটি `analytics` স্কিমার অন্তর্গত, এবং এটিকে `analytics.visits` হিসাবে উল্লেখ করা যেতে পারে।
 
-      3.  Explain the Primary Key and Foreign Key concepts in PostgreSQL.
+## 3.Explain the Primary Key and Foreign Key concepts in PostgreSQL.
+
+### Answer: 
+
+ডেটাবেস ডিজাইন ও ম্যানেজমেন্টে `Primary Key` এবং `Foreign Key` অত্যন্ত গুরুত্বপূর্ণ ভূমিকা পালন করে। এগুলো ডেটাবেসের তথ্যের সঠিকতা, এক্সেস কন্ট্রোল, এবং সম্পর্ক নির্ধারণে সাহায্য করে। নিচে এইগুলির বিস্তারিত আলোচনা করা হলো:
+
+### 1. Primary Key
+`Primary Key` হলো একটি টেবিলের এমন একটি কলাম বা কলামের সংমিশ্রণ, যা প্রতিটি রেকর্ডের জন্য `unique` হতে হবে। এটি টেবিলের মধ্যে কোন `Duplicate` বা `NULL` মান থাকতে দেয় না এবং প্রতিটি রেকর্ডকে সুনির্দিষ্টভাবে চিহ্নিত করে।
+
+<b>Primary Key এর বৈশিষ্ট্য:</b>
+- অনন্য (Unique): একটি টেবিলের প্রতিটি রেকর্ডের জন্য Primary Key কলাম বা কলামগুলির মান `unique` হতে হবে।
+- NULL নয়: Primary Key কলামে `NULL` মান থাকতে পারে না।
+- একটি টেবিলের জন্য শুধু একটিমাত্র Primary Key থাকতে পারে।
+
+<b>উদাহরণ:</b>
+
+```sql
+CREATE TABLE students (
+    student_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50)
+);
+```
+এখানে `student_id` হলো `Primary Key`, যা প্রতিটি শিক্ষার্থীকে অনন্যভাবে চিহ্নিত করবে।
+
+### 2. Foreign Key
+`Foreign Key` হলো একটি টেবিলের একটি কলাম যা অন্য টেবিলের `Primary Key` উল্লেখ করে। এটি দুটি টেবিলের মধ্যে সম্পর্ক তৈরি করতে ব্যবহৃত হয়, যাতে নিশ্চিত করা যায় যে, একটি টেবিলের ডেটা অন্য টেবিলের মধ্যে `Referential Integrity` বজায় রাখে ডাটাবেস এর মাধ্যমে।
+
+<b>Foreign Key এর বৈশিষ্ট্য:</b>
+- <b>ডেটা সম্পর্ক:</b> Foreign Key ডেটাবেসের দুইটি টেবিলের মধ্যে সম্পর্ক নির্ধারণ করে।
+- <b>সীমাবদ্ধতা:</b> Foreign Key সম্পর্কিত টেবিলে থাকা মান অন্য টেবিলের মধ্যে থাকা ডেটার সাথে সম্পর্কিত থাকতে হবে।
+- <b>আপডেট/ডিলিট কনফিগারেশন:</b> Foreign Key ডিলিট বা আপডেটের জন্য কিছু নির্দিষ্ট আচরণ থাকতে পারে, যেমন ON DELETE CASCADE, ON UPDATE RESTRICT ইত্যাদি।
+
+<b>উদাহরণ:</b>
+
+```sql
+CREATE TABLE courses (
+    course_id SERIAL PRIMARY KEY,
+    course_name VARCHAR(100)
+);
+
+CREATE TABLE enrollments (
+    enrollment_id SERIAL PRIMARY KEY,
+    student_id INT,
+    course_id INT,
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+```
+এখানে `enrollments` টেবিলে `course_id` একটি `Foreign Key`, যা `courses` টেবিলের `course_id` এর সাথে সম্পর্কিত।
+
+
 
       4.  What is the difference between the VARCHAR and CHAR data types?
 
