@@ -96,13 +96,39 @@ CREATE TABLE enrollments (
 ```
 এখানে `enrollments` টেবিলে `course_id` একটি `Foreign Key`, যা `courses` টেবিলের `course_id` এর সাথে সম্পর্কিত।
 
+## 4. What is the difference between the VARCHAR and CHAR data types?
+
+### Answer: 
+SQL ডাটাবেস ডিজাইন সাধারণভাবে ব্যবহৃত string data type হল `CHAR` এবং `VARCHAR।` স্টোরেজ এবং কোয়েরি পারফরম্যান্স অপ্টিমাইজ করার জন্য `CHAR` এবং `VARCHAR` এর মধ্যে পার্থক্য বোঝা অপরিহার্য। নিচে এদের মধ্যে পার্থক্য দেয়া হলো:
+
+<b>CHAR ডেটা টাইপ:</b>
+
+- CHAR হল একটি নির্দিষ্ট দৈর্ঘ্যের ডেটা টাইপ। যখন আপনি একটি কলামকে CHAR(n) হিসাবে সংজ্ঞায়িত করেন, তখন এটি `n` বাইট স্টোরেজ সংরক্ষণ করে, সংজ্ঞায়িত দৈর্ঘ্য পূরণের জন্য ছোট স্ট্রিংগুলিকে ফাঁকা স্থান দিয়ে দেয়।
+- ব্যবহারের ধরণ: ডেটা সংরক্ষণের জন্য আদর্শ যেখানে এন্ট্রিগুলি সামঞ্জস্যপূর্ণ দৈর্ঘ্যের হয়।
+
+<b>উদাহরণ:</b>
+
+```sql
+CREATE TABLE exampleChar (
+    code CHAR(5)
+);
+```
+Inserting `'AB'` → actually stores `'AB '` (3 trailing spaces).
+
+<b>VARCHAR ডেটা টাইপ:</b>
+
+এটি SQL-এর একটি ডেটাটাইপ যা ভেরিয়েবল দৈর্ঘ্যের অক্ষর স্ট্রিং সংরক্ষণ করতে ব্যবহৃত হয় কিন্তু সর্বোচ্চ নির্দিষ্ট দৈর্ঘ্যের মধ্যে থাকে। যদি স্ট্রিংয়ের দৈর্ঘ্য সেট বা স্থির দৈর্ঘ্যের চেয়ে কম হয় তবে এটি অতিরিক্ত ফাঁকা স্থান ছাড়াই যেমন আছে তেমন সংরক্ষণ করবে। VARCHAR ডেটাটাইপের স্টোরেজ সাইজ বাইটে প্রবেশ করানো স্ট্রিংয়ের প্রকৃত দৈর্ঘ্যের সমান।
+
+```sql
+CREATE TABLE example2 (
+    name VARCHAR(20)
+);
+```
+Inserting `'Alice'` → stored as `'Alice'` only (no extra space).
 
 
-      4.  What is the difference between the VARCHAR and CHAR data types?
 
       5.  Explain the purpose of the WHERE clause in a SELECT statement.
-
-      6.  What are the LIMIT and OFFSET clauses used for?
 
       7.  How can you modify data using UPDATE statements?
 
