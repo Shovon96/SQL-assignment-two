@@ -1,8 +1,8 @@
 
 -- Create Rangers Table
 CREATE Table rangers (
-    rangers_id SERIAL PRIMARY KEY,
-    rangers_name VARCHAR(50) NOT NULL,
+    ranger_id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
     region TEXT
 );
 
@@ -18,15 +18,15 @@ CREATE Table species (
 --  Create Sightings Table
 CREATE Table sightings (
     sighting_id SERIAL PRIMARY KEY UNIQUE,
-    ranger_id INTEGER REFERENCES rangers(rangers_id) ON DELETE CASCADE,
+    ranger_id INTEGER REFERENCES rangers(ranger_id) ON DELETE CASCADE,
     species_id INTEGER REFERENCES species(species_id) ON DELETE CASCADE,
     sighting_time TIMESTAMP NOT NULL,
     location TEXT,
-    note TEXT
+    notes TEXT
 );
 
 -- Insert the data in Rengers table
-INSERT INTO rangers (rangers_id, rangers_name, region) 
+INSERT INTO rangers (ranger_id, name, region) 
 VALUES
 (1, 'Alice Green', 'Northern Hills'),
 (2, 'Bob White', 'River Delta'),
@@ -41,7 +41,7 @@ VALUES
 (4, 'Asiatic Elephant', 'Elephas maximus indicus', '1758-01-01', 'Endangered');
 
 -- Insert the data in Sighting table
-INSERT INTO sightings (sighting_id, species_id, ranger_id, location, sighting_time, note) 
+INSERT INTO sightings (sighting_id, species_id, ranger_id, location, sighting_time, notes) 
 VALUES
 (1, 1, 1, 'Peak Ridge', '2024-05-10 07:45:00', 'Camera trap image captured'),
 (2, 2, 2, 'Bankwood Area', '2024-05-12 16:20:00', 'Juvenile seen'),
@@ -61,10 +61,10 @@ SELECT * FROM sightings;
 
 
 -- Problem 1: Insert new value in Rangers table
-INSERT INTO rangers (rangers_id, rangers_name, region)
+INSERT INTO rangers (ranger_id, name, region)
 VALUES (4, 'Derek Fox', 'Coastal Plains');
 
-INSERT INTO rangers (rangers_name, region)
+INSERT INTO rangers (name, region)
 VALUES ('Derek Fox', 'Coastal Plains');
 
 
@@ -80,11 +80,11 @@ WHERE location ILIKE '%pass%';
 
 
 -- Problem 4: List each ranger's name and their total number of sightings.
-SELECT r.rangers_name, COUNT(s.sighting_id) AS total_sightings
+SELECT r.name, COUNT(s.sighting_id) AS total_sightings
 FROM rangers r
-LEFT JOIN sightings s ON r.rangers_id = s.ranger_id
-GROUP BY r.rangers_name
-ORDER BY r.rangers_name;
+LEFT JOIN sightings s ON r.ranger_id = s.ranger_id
+GROUP BY r.name
+ORDER BY r.name;
 
 
 -- Problem 5: List species that have never been sighted.
@@ -98,10 +98,10 @@ WHERE NOT EXISTS (
 
  
 -- Problem 6: Show the most recent 2 sightings.
-SELECT sp.common_name, si.sighting_time, r.rangers_name
+SELECT sp.common_name, si.sighting_time, r.name
 FROM sightings si
 JOIN species sp ON si.species_id = sp.species_id
-JOIN rangers r ON si.ranger_id = r.rangers_id
+JOIN rangers r ON si.ranger_id = r.ranger_id
 ORDER BY si.sighting_time DESC
 LIMIT 2;
 
@@ -129,6 +129,6 @@ FROM sightings;
 
 -- Problem 9: Delete rangers who have never sighted any species
 DELETE FROM rangers
-WHERE rangers_id NOT IN (
-    SELECT DISTINCT rangers_id FROM sightings
+WHERE ranger_id NOT IN (
+    SELECT DISTINCT ranger_id FROM sightings
 );
